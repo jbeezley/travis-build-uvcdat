@@ -13,7 +13,7 @@ before_install:
 
 install:
   - ./setup.sh
-  - ./build.sh
+  - travis_wait ./build.sh
 
 script:
   - ./test.sh
