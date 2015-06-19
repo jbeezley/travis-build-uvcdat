@@ -1,0 +1,35 @@
+language: c
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - python-virtualenv
+      - gfortran
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then pushd $HOME && mkdir cmake3.2 && cd cmake3.2 && (curl "http://www.cmake.org/files/v3.2/cmake-3.2.3-Linux-x86_64.tar.gz" | gunzip -c | tar x) && cd cmake-*/bin && export PATH="${PWD}:${PATH}"; popd; fi
+
+install:
+  - ./setup.sh
+  - ./build.sh
+
+script:
+  - ./test.sh
+  - ./package.sh
+  - ./pyenv/bin/python deploy.py
+
+env:
+  global:
+    - prefix=local
+    - name=uvcdat
+    - version=2.2.0
+    - url=https://github.com/UV-CDAT/uvcdat/archive/2.2.0.tar.gz
+    - srcpath="uvcdat-2.2.0"
+    - buildpath="build"
+    - cmake_opts="-DCDAT_BUILD_WEB=ON -DCDAT_BUILD_GUI=OFF -DCDAT_BUILD_OSMESA=ON -DCDAT_BUILD_OFFSCREEN=ON"
+    - GIRDER_URL=https://data.kitware.com/api/v1
+    - GIRDER_USER=travis-packages
+    - GIRDER_FOLDER=55535d828d777f082b592f55
+    - secure: "WG/z6FyF3aQeMcQDkg8sbxe6F2w6MJA0hHoYXoB6k6YPRWi0mOzP9JwkOEb5cSHPcbBsoI+Pv6Yc7om1Vb8l85Wty3rO5c9n3szR/4wybPP6xNWpn4sJjsjnuGSfwMQpQBLfjvcY4qNAc5uaoD9ova80FQt31A2k0a9g0jpOTsG62UsSDyNc+YG4ecuRf6QIY1M6Yx7R55/BZl6fjdq/uEF9PNcGfcX5inFAsVHI5sNhiilYO4zWp9DgSfySA2z3j4D+3E9ll4oLu+XYyOKOGo8lxUk+7qFcum7VYtMB94tJx+uVAv0ZdoF0Jp+ucaY7DpIufGBcRx7/Z4tQMgNL976xOlTwr+l4O16xSFGu3eLf0TEQW+MKPxrsh1le5XhbbP9bGfcnYjjfCLFONDPOtvSnpqAF4BG5XbWYjI5rHQF9NrMv0NWnDO6xIqCsXceon6dj7xwiPjeq7hGlJO5m+qwvRK4SEsw9rMX2IeQyGv8Ot2nJAdB+o/BoRQTnVIiQPnDAPg4phrefKNuNwST5BG+XjCwM4yjsEIM6NlgILdKldhBU3GB6LT7asqRAvWADtr8g5KKSsTveZQJnxnxc/t9TBWv8qASHbz19jwsRJSfKQM7aWho8em/gxXpzuvJpbrxqSTk7mZhfPnO8PHUDjuwc41uwU2JjFs++SBYjbok="
