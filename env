@@ -1,0 +1,2 @@
+export UVCDAT_ANONYMOUS_LOG=no
+source ${HOME}/local/bin/setup_runtime.sh
